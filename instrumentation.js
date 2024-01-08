@@ -11,10 +11,7 @@ const {
 } = require('@opentelemetry/exporter-metrics-otlp-proto');
 const { PeriodicExportingMetricReader } = require('@opentelemetry/sdk-metrics');
 const { PgInstrumentation } = require('@opentelemetry/instrumentation-pg');
-const { KnexInstrumentation, KnexInstrumentationConfig } = require('@opentelemetry/instrumentation-knex');
-// const { ConsoleSpanExporter, SimpleSpanProcessor } = require('@opentelemetry/sdk-trace-base');
-// const { NodeTracerProvider } = require('@opentelemetry/sdk-trace-node');
-// const { registerInstrumentations } = require('@opentelemetry/instrumentation');
+const { KnexInstrumentation } = require('@opentelemetry/instrumentation-knex');
 
 const sdk = new opentelemetry.NodeSDK({
     traceExporter: new OTLPTraceExporter({
@@ -43,34 +40,3 @@ const sdk = new opentelemetry.NodeSDK({
     ],
 });
 sdk.start();
-
-
-// const { NodeTracerProvider } = require('@opentelemetry/sdk-trace-node');
-// const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
-// const { CollectorTraceExporter } = require('@opentelemetry/exporter-collector');
-// const { Resource } = require('@opentelemetry/resources');
-// const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions');
-// const { SimpleSpanProcessor } = require('@opentelemetry/sdk-trace-base');
-// const { registerInstrumentations } = require('@opentelemetry/instrumentation');
-
-// const exporter = new CollectorTraceExporter();
-// const provider = new NodeTracerProvider({
-//     resource: new Resource({
-//         [SemanticResourceAttributes.SERVICE_NAME]: 'basic-service',
-//     }),
-// });
-// provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
-// provider.register();
-
-// registerInstrumentations({
-//     instrumentations: [
-//         getNodeAutoInstrumentations({
-//             // load custom configuration for http instrumentation
-//             '@opentelemetry/instrumentation-http': {
-//                 applyCustomAttributesOnSpan: (span) => {
-//                     span.setAttribute('foo2', 'bar2');
-//                 },
-//             },
-//         }),
-//     ],
-// });
