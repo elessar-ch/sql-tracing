@@ -10,7 +10,7 @@ const {
     OTLPMetricExporter,
 } = require('@opentelemetry/exporter-metrics-otlp-proto');
 const { PeriodicExportingMetricReader } = require('@opentelemetry/sdk-metrics');
-
+const { PgInstrumentation } = require('@opentelemetry/instrumentation-pg');
 const { KnexInstrumentation, KnexInstrumentationConfig } = require('@opentelemetry/instrumentation-knex');
 // const { ConsoleSpanExporter, SimpleSpanProcessor } = require('@opentelemetry/sdk-trace-base');
 // const { NodeTracerProvider } = require('@opentelemetry/sdk-trace-node');
@@ -37,6 +37,9 @@ const sdk = new opentelemetry.NodeSDK({
                 maxQueryLength: 100,
             }
         ),
+        new PgInstrumentation({
+            addSqlCommenterCommentToQueries: true,
+        })
     ],
 });
 sdk.start();
