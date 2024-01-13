@@ -16,8 +16,8 @@ exports.up = function (knex) {
  */
 exports.down = function (knex) {
     return knex.schema
-        .dropTableIfExists('product')
-        .dropTableIfExists('purchase')
         .dropTableIfExists('purchaseItem')
+        .dropTableIfExists('purchase')
         .dropTableIfExists('cartItem')
+        .dropTableIfExists('product')
 };
