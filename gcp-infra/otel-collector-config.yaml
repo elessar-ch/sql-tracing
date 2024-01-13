@@ -3,37 +3,12 @@ receivers:
     protocols:
       grpc:
       http:
-  # postgresql:
-  #   endpoint: db:5432
-  #   transport: tcp
-  #   username: oteluser
-  #   password: otelpw
-  #   databases:
-  #     - knexdb
-  #   collection_interval: 10s
-  #   tls:
-  #     insecure: true
 exporters:
   debug:
     verbosity: detailed
-  # otlp/jaeger:
-  #   endpoint: jaeger:4317
-  #   tls:
-  #     insecure: true
   googlecloud:
     log:
       default_log_name: opentelemetry.io/collector-exported-log
-  # prometheus:
-  #   endpoint: "0.0.0.0:8889"
-  #   namespace: test-space
-  #   const_labels:
-  #     label1: value1
-  #   send_timestamps: true
-  #   metric_expiration: 180m
-  #   enable_open_metrics: true
-  #   add_metric_suffixes: false
-  #   resource_to_telemetry_conversion:
-  #     enabled: true
 service:
   pipelines:
     traces:
