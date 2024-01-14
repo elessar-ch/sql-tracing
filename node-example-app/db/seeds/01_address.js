@@ -22,5 +22,7 @@ exports.seed = function (knex) {
       city: "New York",
       code: '10001'
     },
-  ]);
+  ]).then(function () {
+    return knex.schema.raw('ALTER SEQUENCE address_id_seq RESTART WITH 4')
+  });
 };

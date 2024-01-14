@@ -33,5 +33,7 @@ exports.seed = function (knex) {
       image: "https://images.example.com/BONOLAMPI.jpg",
       stock: 25,
     },
-  ]);
+  ]).then(function () {
+    return knex.schema.raw('ALTER SEQUENCE product_id_seq RESTART WITH 4')
+  });
 };

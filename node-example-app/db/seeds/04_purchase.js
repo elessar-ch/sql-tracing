@@ -17,5 +17,7 @@ exports.seed = function (knex) {
             user_id: 3,
             datetime: "2023-06-30 12:00:00",
         }
-    ]);
+    ]).then(function () {
+        return knex.schema.raw('ALTER SEQUENCE purchase_id_seq RESTART WITH 4')
+    });
 }

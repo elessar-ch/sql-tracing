@@ -39,5 +39,7 @@ exports.seed = function (knex) {
         password: bcrypt.hashSync('Password', bcrypt.genSaltSync(10)),
         address_id: 3,
       }
-    ]);
+    ]).then(function () {
+      return knex.schema.raw('ALTER SEQUENCE user_id_seq RESTART WITH 4')
+    });
 };

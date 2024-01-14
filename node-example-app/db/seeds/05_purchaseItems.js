@@ -17,7 +17,7 @@ exports.seed = function (knex) {
         {
             id: 3,
             purchase_id: 2,
-            product_id: 3,
+            product_id: 2,
             quantity: 3,
         },
         {
@@ -44,5 +44,7 @@ exports.seed = function (knex) {
             product_id: 2,
             quantity: 2,
         },
-    ]);
+    ]).then(function () {
+        return knex.schema.raw('ALTER SEQUENCE "purchaseItem_id_seq" RESTART WITH 8')
+    });
 }

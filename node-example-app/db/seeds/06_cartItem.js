@@ -7,5 +7,7 @@ exports.seed = function (knex) {
             product_id: 1,
             quantity: 1,
         }
-    ]);
+    ]).then(function () {
+        return knex.schema.raw('ALTER SEQUENCE "cartItem_id_seq" RESTART WITH 4')
+    });
 }
