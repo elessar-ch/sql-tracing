@@ -12,6 +12,7 @@ const {
 const { PeriodicExportingMetricReader } = require('@opentelemetry/sdk-metrics');
 const { PgInstrumentation } = require('@opentelemetry/instrumentation-pg');
 const { KnexInstrumentation } = require('@opentelemetry/instrumentation-knex');
+const { ExpressInstrumentation } = require('@opentelemetry/instrumentation-express');
 
 const sdk = new opentelemetry.NodeSDK({
     traceExporter: new OTLPTraceExporter({
@@ -36,7 +37,8 @@ const sdk = new opentelemetry.NodeSDK({
         ),
         new PgInstrumentation({
             addSqlCommenterCommentToQueries: true,
-        })
+        }),
+        new ExpressInstrumentation(),
     ],
 });
 sdk.start();
