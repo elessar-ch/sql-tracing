@@ -14,6 +14,8 @@ const { PgInstrumentation } = require('@opentelemetry/instrumentation-pg');
 const { KnexInstrumentation } = require('@opentelemetry/instrumentation-knex');
 const { ExpressInstrumentation } = require('@opentelemetry/instrumentation-express');
 
+require('dotenv').config()
+
 const sdk = new opentelemetry.NodeSDK({
     traceExporter: new OTLPTraceExporter({
         // optional - default url is http://localhost:4318/v1/traces
