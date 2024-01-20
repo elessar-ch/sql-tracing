@@ -20,6 +20,14 @@ services:
     networks:
       - adminer-network
       - otel
+      - fluent-bit
+    logging:
+      driver: "fluentd"
+      options:
+        tag: docker.logify
+        fluentd-address: 127.0.0.1:24224
+    depends_on:
+      - fluent-bit
   adminer:
     image: adminer
     restart: always
@@ -43,6 +51,20 @@ services:
       - prometheus
       - otel
       - jaeger
+      - fluent-bit
+  fluent-bit:
+    image: fluent/fluent-bit:latest
+    volumes:
+      - ./fluent-bit:/fluent-bit/etc
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ["fluent-bit", "-c", "/fluent-bit/etc/fluent-bit.conf"]
+    container_name: fluent-bit
+    ports:
+      - 24224:24224
+    networks:
+      - fluent-bit
+    depends_on:
+      - otel-collector
   jaeger:
     image:  jaegertracing/all-in-one:1.52
     environment:
@@ -67,6 +89,7 @@ networks:
   otel:
   jaeger:
   prometheus:
+  fluent-bit:
 volumes:
   prometheus-volume:
     external: false
