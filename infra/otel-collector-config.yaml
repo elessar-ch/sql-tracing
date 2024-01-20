@@ -43,10 +43,10 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [debug, otlp/jaeger]
+      exporters: [otlp/jaeger]
     metrics:
       receivers: [otlp, postgresql]
-      exporters: [debug, prometheus]
+      exporters: [prometheus]
     logs:
       receivers: [otlp]
       exporters: [debug]
