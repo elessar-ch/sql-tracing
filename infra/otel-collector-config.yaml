@@ -23,6 +23,13 @@ processors:
       - type: json_parser
         if: 'body.log matches "^{.*}$"'
         parse_from: body.log
+  filter/knexuser:
+    logs:
+      include:
+        match_type: strict
+        record_attributes:
+          - key: user
+            value: knexuser
 exporters:
   debug:
     verbosity: detailed
@@ -55,5 +62,5 @@ service:
       exporters: [prometheus]
     logs/postgres:
       receivers: [otlp]
-      processors: [logstransform/fluentbitlog]
+      processors: [logstransform/fluentbitlog, filter/knexuser]
       exporters: [debug]
