@@ -21,6 +21,7 @@ processors:
   logstransform/fluentbitlog:
     operators:
       - type: json_parser
+        if: 'body.log matches "^{.*}$"'
         parse_from: body.log
 exporters:
   debug:
