@@ -36,7 +36,7 @@ services:
     networks:
       - adminer-network
   otel-collector:
-    image: otelcol-custom
+    build: otelcol-custom/
     volumes:
       - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
     ports:
