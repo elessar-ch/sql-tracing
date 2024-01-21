@@ -6,3 +6,4 @@ credentials/
 .terraform/
 infra-gcp/terraform.tfstate
 sql-log/
+*.log
