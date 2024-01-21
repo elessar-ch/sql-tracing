@@ -28,6 +28,7 @@ services:
         fluentd-address: 127.0.0.1:24224
     depends_on:
       - fluent-bit
+    attach: false
   adminer:
     image: adminer
     restart: always
