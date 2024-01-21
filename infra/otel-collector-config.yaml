@@ -17,6 +17,11 @@ receivers:
       # ca_file: /home/otel/authorities.crt
       # cert_file: /home/otel/mypostgrescert.crt
       # key_file: /home/otel/mypostgreskey.key
+processors:
+  logstransform/fluentbitlog:
+    operators:
+      - type: json_parser
+        parse_from: body.log
 exporters:
   debug:
     verbosity: detailed
@@ -47,6 +52,7 @@ service:
     metrics:
       receivers: [otlp, postgresql]
       exporters: [prometheus]
-    logs:
+    logs/postgres:
       receivers: [otlp]
+      processors: [logstransform/fluentbitlog]
       exporters: [debug]
