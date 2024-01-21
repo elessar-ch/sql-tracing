@@ -13,10 +13,6 @@ receivers:
     collection_interval: 10s
     tls:
       insecure: true
-      # insecure_skip_verify: false
-      # ca_file: /home/otel/authorities.crt
-      # cert_file: /home/otel/mypostgrescert.crt
-      # key_file: /home/otel/mypostgreskey.key
 processors:
   logstransform/fluentbitlog:
     operators:
@@ -39,10 +35,6 @@ exporters:
       insecure: true
   prometheus:
     endpoint: "0.0.0.0:8889"
-    # tls:
-      # ca_file: "/path/to/ca.pem"
-      # cert_file: "/path/to/cert.pem"
-      # key_file: "/path/to/key.pem"
     namespace: test-space
     const_labels:
       label1: value1
