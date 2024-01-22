@@ -33,6 +33,10 @@ exporters:
     endpoint: jaeger:4317
     tls:
       insecure: true
+  otlp/example:
+    endpoint: host.docker.internal:14317
+    tls:
+      insecure: true
   prometheus:
     endpoint: "0.0.0.0:8889"
     namespace: test-space
@@ -48,11 +52,11 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [otlp/jaeger]
+      exporters: [otlp/jaeger, debug]
     metrics:
       receivers: [otlp, postgresql]
       exporters: [prometheus]
     logs/postgres:
       receivers: [otlp]
       processors: [logstransform/fluentbitlog, filter/knexuser]
-      exporters: [debug]
+      exporters: [otlp/example]
