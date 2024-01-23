@@ -3,6 +3,10 @@ receivers:
     protocols:
       grpc:
       http:
+  otlp/example:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4319
   postgresql:
     endpoint: db:5432
     transport: tcp
@@ -52,6 +56,9 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
+      exporters: [otlp/jaeger]
+    traces/example:
+      receivers: [otlp/example]
       exporters: [otlp/jaeger, debug]
     metrics:
       receivers: [otlp, postgresql]
