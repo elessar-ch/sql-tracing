@@ -23,6 +23,10 @@ processors:
       - type: json_parser
         if: 'body.log matches "^{.*}$"'
         parse_from: body.log
+        timestamp:
+          parse_from: attributes.timestamp
+          layout_type: strptime
+          layout: '%Y-%m-%d %H:%M:%S.%L %Z'
   filter/knexuser:
     logs:
       include:
