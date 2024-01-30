@@ -90,3 +90,49 @@ curl -v -H "x-auth-token: $AUTHTOKEN" http://localhost:3000/api/purchase/4/items
 - Traces can be viewed in Jaeger on [http://localhost:16686](http://localhost:16686)
 - Metrics can be viewed in Prometheus on [http://localhost:9090/](http://localhost:9090/)
 - Logs can be viewed using the `docker logs <container name>` command
+
+
+## To run the project using Cloud SQL on GCP use the following setup
+
+The infrastructure for GCP is located in the `gcp-infra` folder.
+
+### Prerequisites
+You must have an account on GCP and a project called `sql-trace`.
+
+Enable the following APIs:
+- https://console.cloud.google.com/marketplace/product/google/iam.googleapis.com
+- https://console.cloud.google.com/marketplace/product/google/compute.googleapis.com
+- https://console.cloud.google.com/marketplace/product/google/sqladmin.googleapis.com
+- https://console.cloud.google.com/marketplace/product/google/cloudtrace.googleapis.com
+- https://console.cloud.google.com/apis/library/cloudresourcemanager.googleapis.com
+
+Create a service account for terraform and a key with the right permissions as documented on
+[https://developer.hashicorp.com/terraform/tutorials/gcp-get-started/google-cloud-platform-build](https://developer.hashicorp.com/terraform/tutorials/gcp-get-started/google-cloud-platform-build)
+The service account must have the role `Project IAM Admin` on the project
+Download the service account credentials and store them in `./credentials/sql-trace-terraform.json`.
+
+
+
+Install Terraform on your machine.
+
+## Provisioning the infrastructure
+
+Before provisioning the infrastructure: Change the IP for inbound traffic to the PostgreSQL instance in `main.tf`.
+
+
+Use `terraform init` and `terraform apply` to provision the infrastructure on GCP.
+
+Set the instance ip of your PostgreSQL db in Cloud SQL in the `docker-compose.yaml` (where it says `<your-postgres-host>`).
+
+Now run the the command to spin up the infrastructure:
+```sh
+docker compose up
+```
+
+Run the following commands to finish setting up the database. Before running, replace the `<your-postgres-host>` with the ip of your PostgreSQL instance in Cloud SQL.
+
+```sh
+docker run -e POSTGRES_HOST=<your-postgres-host> -e DATABASE_NAME=knexdb -e POSTGRES_USER=knexuser -e POSTGRES_USER_PW=knexpw -e POSTGRES_PORT=5432 --entrypoint npm infra-node-example-app run migrate
+
+docker run -e POSTGRES_HOST=<your-postgres-host> -e DATABASE_NAME=knexdb -e POSTGRES_USER=knexuser -e POSTGRES_USER_PW=knexpw -e POSTGRES_PORT=5432 --entrypoint npm infra-node-example-app run seed
+```

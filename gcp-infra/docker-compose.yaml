@@ -2,6 +2,22 @@
 version: '3.1'
 
 services:
+  node-example-app:
+    build: ../node-example-app/
+    restart: always
+    environment:
+      DATABASE_NAME: knexdb
+      POSTGRES_USER: knexuser
+      POSTGRES_USER_PW: knexpw
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: <your-postgres-host>
+      NODE_ENV: development
+      OTEL_COLLECTOR_TRACES_URL: 'http://otel-collector:4318/v1/traces'
+      OTEL_COLLECTOR_METRICS_URL: 'http://otel-collector:4318/v1/metrics'
+    ports:
+      - 3000:3000
+    networks:
+      - otel
   adminer:
     image: adminer
     restart: always
