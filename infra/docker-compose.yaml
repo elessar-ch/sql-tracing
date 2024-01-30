@@ -54,6 +54,14 @@ services:
       - otel
       - jaeger
       - fluent-bit
+  pgtrace-collector:
+    image: elessar1ch/pgtraceconnector:v0.0.1
+    volumes:
+      - ./pgtraceconnector-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+    ports:
+      - 4317 # OTLP gRPC receiver
+    networks:
+      - otel
   fluent-bit:
     image: fluent/fluent-bit:latest
     volumes:

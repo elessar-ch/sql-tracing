@@ -37,8 +37,8 @@ exporters:
     endpoint: jaeger:4317
     tls:
       insecure: true
-  otlp/example:
-    endpoint: host.docker.internal:14317
+  otlp/pgtrace:
+    endpoint: pgtrace-collector:4317
     tls:
       insecure: true
   prometheus:
@@ -63,4 +63,4 @@ service:
     logs/postgres:
       receivers: [otlp]
       processors: [logstransform/fluentbitlog, filter/knexuser]
-      exporters: [otlp/example]
+      exporters: [otlp/pgtrace, debug]

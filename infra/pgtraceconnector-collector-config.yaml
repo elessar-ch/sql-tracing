@@ -1,0 +1,31 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+exporters:
+  debug:
+    verbosity: detailed
+  otlp:
+    endpoint: otel-collector:4317
+    tls:
+      insecure: true
+
+processors:
+  batch:
+
+connectors:
+  pgtrace:
+    attribute_name: db.name
+
+service:
+  pipelines:
+    traces:
+      receivers: [pgtrace]
+      exporters: [debug, otlp]
+    logs:
+      receivers: [otlp]
+      exporters: [pgtrace, debug]
