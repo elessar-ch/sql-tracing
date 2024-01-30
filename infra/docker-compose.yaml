@@ -104,7 +104,7 @@ services:
     networks:
       - jaeger
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.49.1
     volumes:
       - ./prometheus.yaml:/etc/prometheus/prometheus.yml
       - prometheus-volume:/prometheus
