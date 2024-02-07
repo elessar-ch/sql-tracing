@@ -72,6 +72,7 @@ services:
       - otel
       - jaeger
       - fluent-bit
+      - loki
   pgtrace-collector:
     image: elessar1ch/pgtraceconnector:v0.0.1
     volumes:
@@ -93,6 +94,13 @@ services:
       - fluent-bit
     depends_on:
       - otel-collector
+  loki:
+    image: grafana/loki:2.9.4
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - loki
   jaeger:
     image:  jaegertracing/all-in-one:1.52
     environment:
@@ -112,6 +120,20 @@ services:
       - 9090:9090
     networks:
       - prometheus
+  grafana:
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    volumes:
+      - ./grafana-datasources.yaml:/etc/grafana/provisioning/datasources/ds.yaml
+    image: grafana/grafana:10.3.1
+    ports:
+      - "13000:3000"
+    networks:
+      - loki
+      - prometheus
+      - jaeger
 networks:
   adminer-network:
   otel:
@@ -119,6 +141,7 @@ networks:
   prometheus:
   fluent-bit:
   db:
+  loki:
 volumes:
   prometheus-volume:
     external: false

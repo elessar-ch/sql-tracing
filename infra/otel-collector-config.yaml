@@ -52,15 +52,19 @@ exporters:
     add_metric_suffixes: false
     resource_to_telemetry_conversion:
       enabled: true
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push
+    tls:
+      insecure: true
 service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [otlp/jaeger, debug]
+      exporters: [otlp/jaeger]
     metrics:
       receivers: [otlp, postgresql]
       exporters: [prometheus]
     logs/postgres:
       receivers: [otlp]
       processors: [logstransform/fluentbitlog, filter/knexuser]
-      exporters: [otlp/pgtrace, debug]
+      exporters: [otlp/pgtrace, loki]
