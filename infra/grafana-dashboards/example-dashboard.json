@@ -1,0 +1,193 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": {
+                    "type": "grafana",
+                    "uid": "-- Grafana --"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 1,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+        {
+            "datasource": {
+                "type": "loki",
+                "uid": "DzuPFa9P2"
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 4,
+            "options": {
+                "dedupStrategy": "none",
+                "enableLogDetails": true,
+                "prettifyLogMessage": false,
+                "showCommonLabels": false,
+                "showLabels": false,
+                "showTime": false,
+                "sortOrder": "Descending",
+                "wrapLogMessage": false
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "loki",
+                        "uid": "DzuPFa9P2"
+                    },
+                    "editorMode": "code",
+                    "expr": "{exporter=\"OTLP\"}",
+                    "queryType": "range",
+                    "refId": "A"
+                }
+            ],
+            "title": "Logs",
+            "type": "logs"
+        },
+        {
+            "datasource": {
+                "type": "jaeger",
+                "uid": "EbPG8fYoz"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "custom": {
+                        "align": "auto",
+                        "cellOptions": {
+                            "type": "auto"
+                        },
+                        "inspect": false
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unitScale": true
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 7
+            },
+            "id": 3,
+            "options": {
+                "cellHeight": "sm",
+                "footer": {
+                    "countRows": false,
+                    "fields": "",
+                    "reducer": [
+                        "sum"
+                    ],
+                    "show": false
+                },
+                "showHeader": true
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "jaeger",
+                        "uid": "EbPG8fYoz"
+                    },
+                    "queryType": "search",
+                    "refId": "A",
+                    "service": "node-example-app",
+                    "tags": ""
+                }
+            ],
+            "title": "Panel Title",
+            "type": "table"
+        },
+        {
+            "datasource": {
+                "type": "jaeger",
+                "uid": "EbPG8fYoz"
+            },
+            "gridPos": {
+                "h": 15,
+                "w": 24,
+                "x": 0,
+                "y": 15
+            },
+            "id": 2,
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "jaeger",
+                        "uid": "EbPG8fYoz"
+                    },
+                    "query": "${traceId}",
+                    "refId": "A",
+                    "service": "node-example-app"
+                }
+            ],
+            "title": "Traces",
+            "type": "traces"
+        }
+    ],
+    "refresh": "",
+    "schemaVersion": 39,
+    "tags": [],
+    "templating": {
+        "list": [
+            {
+                "current": {
+                    "selected": false,
+                    "text": "e9c98f375e8924031388234984213f92",
+                    "value": "e9c98f375e8924031388234984213f92"
+                },
+                "hide": 0,
+                "includeAll": false,
+                "label": "Trace ID",
+                "multi": false,
+                "name": "traceId",
+                "options": [],
+                "query": "",
+                "queryValue": "",
+                "skipUrlSync": false,
+                "type": "custom"
+            }
+        ]
+    },
+    "time": {
+        "from": "2024-02-07T15:28:09.724Z",
+        "to": "2024-02-07T15:33:30.426Z"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Example dashboard",
+    "uid": "e54998fc-0fd7-4cc4-a577-43dff51a7733",
+    "version": 3,
+    "weekStart": ""
+}

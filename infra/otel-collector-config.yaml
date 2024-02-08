@@ -16,13 +16,23 @@ receivers:
 processors:
   logstransform/fluentbitlog:
     operators:
-      - type: json_parser
-        if: 'body.log matches "^{.*}$"'
-        parse_from: body.log
-        timestamp:
-          parse_from: attributes.timestamp
-          layout_type: strptime
-          layout: '%Y-%m-%d %H:%M:%S.%L %Z'
+    - type: json_parser
+      if: 'body.log matches "^{.*}$"'
+      parse_from: body.log
+      timestamp:
+        parse_from: attributes.timestamp
+        layout_type: strptime
+        layout: '%Y-%m-%d %H:%M:%S.%L %Z'
+    - type: regex_parser
+      regex: "traceparent='00-(?P<trace_id>\\S*)-(?P<span_id>\\S*)-(?P<trace_flags>\\d*)'"
+      parse_from: body.log
+      trace:
+        trace_id:
+          parse_from: attributes.trace_id
+        span_id:
+          parse_from: attributes.span_id
+        trace_flags:
+          parse_from: attributes.trace_flags
   filter/knexuser:
     logs:
       include:
@@ -30,6 +40,16 @@ processors:
         record_attributes:
           - key: user
             value: knexuser
+  attributes/loki:
+    actions:
+      - action: insert
+        key: loki.attribute.labels
+        value: dbname, user
+  # resource/loki:
+  #   attributes:
+  #     - action: insert
+  #       key: loki.resource.labels
+  #       value: service.name, service.namespace
 exporters:
   debug:
     verbosity: detailed
@@ -56,6 +76,8 @@ exporters:
     endpoint: http://loki:3100/loki/api/v1/push
     tls:
       insecure: true
+connectors:
+  forward:
 service:
   pipelines:
     traces:
@@ -67,4 +89,8 @@ service:
     logs/postgres:
       receivers: [otlp]
       processors: [logstransform/fluentbitlog, filter/knexuser]
-      exporters: [otlp/pgtrace, loki]
+      exporters: [otlp/pgtrace, forward]
+    logs/loki:
+      receivers: [forward]
+      processors: [attributes/loki]
+      exporters: [loki, debug]
