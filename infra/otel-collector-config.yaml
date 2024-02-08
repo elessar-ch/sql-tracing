@@ -13,6 +13,69 @@ receivers:
     collection_interval: 10s
     tls:
       insecure: true
+  sqlquery/pgstatstatements:
+    driver: postgres
+    datasource: "host=db port=5432 user=oteluser password=otelpw sslmode=disable database=knexdb"
+    queries:
+    - sql: "select * from pg_stat_statements WHERE CAST(dbid AS text) = '16391' AND CAST(userid AS text) = '16392' AND toplevel = true"
+      metrics:
+      - metric_name: pg_stat_statements_total_exec_time
+        value_column: total_exec_time
+        attribute_columns:
+          - queryid
+          - userid
+          - dbid
+        value_type: double
+        data_type: sum
+      - metric_name: pg_stat_statements_stddev_exec_time
+        value_column: stddev_exec_time
+        attribute_columns:
+          - queryid
+          - userid
+          - dbid
+        value_type: double
+        data_type: gauge
+      - metric_name: pg_stat_statements_min_exec_time
+        value_column: min_exec_time
+        attribute_columns:
+          - queryid
+          - userid
+          - dbid
+        value_type: double
+        data_type: gauge
+      - metric_name: pg_stat_statements_max_exec_time
+        value_column: max_exec_time
+        attribute_columns:
+          - queryid
+          - userid
+          - dbid
+        value_type: double
+        data_type: gauge
+      - metric_name: pg_stat_statements_mean_exec_time
+        value_column: mean_exec_time
+        attribute_columns:
+          - queryid
+          - userid
+          - dbid
+        value_type: double
+        data_type: gauge
+      - metric_name: pg_stat_statements_calls
+        value_column: calls
+        attribute_columns:
+          - queryid
+          - userid
+          - dbid
+        value_type: int
+        data_type: sum
+        monotonic: true
+      - metric_name: pg_stat_statements_rows
+        value_column: rows
+        attribute_columns:
+          - queryid
+          - userid
+          - dbid
+        value_type: int
+        data_type: sum
 processors:
   logstransform/fluentbitlog:
     operators:
@@ -84,7 +147,7 @@ service:
       receivers: [otlp]
       exporters: [otlp/jaeger]
     metrics:
-      receivers: [otlp, postgresql]
+      receivers: [otlp, postgresql, sqlquery/pgstatstatements]
       exporters: [prometheus]
     logs/postgres:
       receivers: [otlp]
